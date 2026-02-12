@@ -13,6 +13,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
 
@@ -26,7 +27,8 @@ public class StoreBackEndApplication {
     @Bean
     CommandLineRunner initData(UtilisateurRepository utilisateurRepo,
                                CategorieRepository categorieRepo,
-                               AnnonceRepository annonceRepo) {
+                               AnnonceRepository annonceRepo,
+                               PasswordEncoder passwordEncoder) {
         return args -> {
 
             // ======== CATEGORIES ========
@@ -41,32 +43,32 @@ public class StoreBackEndApplication {
             // ======== UTILISATEURS ========
 
             // Admin
-            Utilisateur admin = createUtilisateur(utilisateurRepo,
+            Utilisateur admin = createUtilisateur(utilisateurRepo, passwordEncoder,
                     "Admin", "Super", "admin@mystore.com", "admin123",
                     "0600000000", "Paris", RoleUtilisateur.ADMIN);
 
             // Alice
-            Utilisateur alice = createUtilisateur(utilisateurRepo,
+            Utilisateur alice = createUtilisateur(utilisateurRepo, passwordEncoder,
                     "Dupont", "Alice", "alice.dupont@email.com", "motdepasse123",
                     "0612345678", "Paris", RoleUtilisateur.UTILISATEUR);
 
             // Bob
-            Utilisateur bob = createUtilisateur(utilisateurRepo,
+            Utilisateur bob = createUtilisateur(utilisateurRepo, passwordEncoder,
                     "Martin", "Bob", "bob.martin@email.com", "motdepasse456",
                     "0698765432", "Lyon", RoleUtilisateur.UTILISATEUR);
 
             // Clara
-            Utilisateur clara = createUtilisateur(utilisateurRepo,
+            Utilisateur clara = createUtilisateur(utilisateurRepo, passwordEncoder,
                     "Bernard", "Clara", "clara.bernard@email.com", "motdepasse789",
                     "0655443322", "Marseille", RoleUtilisateur.UTILISATEUR);
 
             // David
-            Utilisateur david = createUtilisateur(utilisateurRepo,
+            Utilisateur david = createUtilisateur(utilisateurRepo, passwordEncoder,
                     "Petit", "David", "david.petit@email.com", "motdepasse101",
                     "0677889900", "Toulouse", RoleUtilisateur.UTILISATEUR);
 
             // Emma
-            Utilisateur emma = createUtilisateur(utilisateurRepo,
+            Utilisateur emma = createUtilisateur(utilisateurRepo, passwordEncoder,
                     "Leroy", "Emma", "emma.leroy@email.com", "motdepasse202",
                     "0611223344", "Bordeaux", RoleUtilisateur.UTILISATEUR);
 
@@ -196,14 +198,14 @@ public class StoreBackEndApplication {
         return repo.save(c);
     }
 
-    private Utilisateur createUtilisateur(UtilisateurRepository repo,
+    private Utilisateur createUtilisateur(UtilisateurRepository repo, PasswordEncoder passwordEncoder,
                                            String nom, String prenom, String email, String mdp,
                                            String telephone, String ville, RoleUtilisateur role) {
         Utilisateur u = new Utilisateur();
         u.setNom(nom);
         u.setPrenom(prenom);
         u.setEmail(email);
-        u.setMotDePasse(mdp);
+        u.setMotDePasse(passwordEncoder.encode(mdp));
         u.setTelephone(telephone);
         u.setVille(ville);
         u.setRole(role);

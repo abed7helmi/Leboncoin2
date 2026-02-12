@@ -6,6 +6,7 @@ import com.store.storebackend.entity.Utilisateur;
 import com.store.storebackend.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +19,11 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-        return authService.login(request)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(401).build());
+        try {
+            return ResponseEntity.ok(authService.login(request));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(401).build();
+        }
     }
 
     @GetMapping("/profil")
