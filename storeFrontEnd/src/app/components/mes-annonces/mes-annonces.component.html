@@ -1,0 +1,41 @@
+<div class="mes-annonces-container">
+  <header class="page-header">
+    <div class="header-row">
+      <div>
+        <h1>Mes annonces</h1>
+        <p class="subtitle">{{ annonces.length }} annonce{{ annonces.length > 1 ? 's' : '' }}</p>
+      </div>
+      <a routerLink="/annonces/nouvelle" class="add-btn">+ Nouvelle annonce</a>
+    </div>
+  </header>
+
+  @if (loading) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Chargement...</p>
+    </div>
+  }
+
+  @if (error) {
+    <div class="error-message">
+      <span class="error-icon">!</span>
+      {{ error }}
+    </div>
+  }
+
+  @if (!loading && !error) {
+    @if (annonces.length === 0) {
+      <div class="empty-state">
+        <p class="empty-title">Aucune annonce</p>
+        <p class="empty-text">Vous n'avez pas encore publie d'annonce.</p>
+        <a routerLink="/annonces/nouvelle" class="add-btn">Publier ma premiere annonce</a>
+      </div>
+    } @else {
+      <div class="cards-grid">
+        @for (annonce of annonces; track annonce.id) {
+          <app-annonce-card [annonce]="annonce" />
+        }
+      </div>
+    }
+  }
+</div>

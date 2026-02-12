@@ -1,0 +1,61 @@
+<div class="annonces-container">
+  <header class="page-header">
+    <h1>Annonces</h1>
+    <p class="subtitle">{{ annonces.length }} annonce{{ annonces.length > 1 ? 's' : '' }} disponible{{ annonces.length > 1 ? 's' : '' }}</p>
+  </header>
+
+  <div class="search-bar">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Rechercher par nom..."
+      [(ngModel)]="searchQuery"
+      (keyup.enter)="onSearch()"
+    />
+    <select class="search-select" [(ngModel)]="selectedCategorieId">
+      <option [ngValue]="null">Toutes les categories</option>
+      @for (cat of categories; track cat.id) {
+        <option [ngValue]="cat.id">{{ cat.nom }}</option>
+      }
+    </select>
+    <button class="search-btn" (click)="onSearch()">Rechercher</button>
+  </div>
+
+  @if (loading) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Chargement des annonces...</p>
+    </div>
+  }
+
+  @if (error) {
+    <div class="error-message">
+      <span class="error-icon">!</span>
+      {{ error }}
+    </div>
+  }
+
+  @if (!loading && !error) {
+    <div class="cards-grid">
+      @for (annonce of paginatedAnnonces; track annonce.id) {
+        <app-annonce-card [annonce]="annonce" />
+      }
+    </div>
+
+    @if (totalPages > 1) {
+      <nav class="pagination">
+        <button class="page-btn" (click)="previousPage()" [disabled]="currentPage === 1">
+          &laquo; Precedent
+        </button>
+        @for (page of pages; track page) {
+          <button class="page-btn" [class.active]="page === currentPage" (click)="goToPage(page)">
+            {{ page }}
+          </button>
+        }
+        <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages">
+          Suivant &raquo;
+        </button>
+      </nav>
+    }
+  }
+</div>

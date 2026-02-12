@@ -1,0 +1,45 @@
+<div class="conversations-container">
+  <h1 class="page-title">Messages</h1>
+
+  @if (loading) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Chargement...</p>
+    </div>
+  }
+
+  @if (!loading && conversations.length === 0) {
+    <div class="empty">
+      <p class="empty-icon">&#9993;</p>
+      <p class="empty-text">Aucune conversation</p>
+      <p class="empty-sub">Vos conversations apparaitront ici lorsque vous contacterez un vendeur.</p>
+    </div>
+  }
+
+  @if (!loading && conversations.length > 0) {
+    <div class="conversation-list">
+      @for (conv of conversations; track conv.annonceId) {
+        <a [routerLink]="['/messages', conv.annonceId]" class="conversation-item" [class.unread]="conv.nonLus > 0">
+          <div class="conv-image">
+            @if (conv.annonceImage) {
+              <img [src]="conv.annonceImage" [alt]="conv.annonceTitre">
+            } @else {
+              <div class="conv-image-placeholder">&#128247;</div>
+            }
+          </div>
+          <div class="conv-content">
+            <div class="conv-header">
+              <span class="conv-name">{{ conv.interlocuteurNom }}</span>
+              <span class="conv-date">{{ formatDate(conv.dateDernierMessage) }}</span>
+            </div>
+            <div class="conv-annonce">{{ conv.annonceTitre }}</div>
+            <div class="conv-message">{{ conv.dernierMessage }}</div>
+          </div>
+          @if (conv.nonLus > 0) {
+            <div class="conv-badge">{{ conv.nonLus }}</div>
+          }
+        </a>
+      }
+    </div>
+  }
+</div>

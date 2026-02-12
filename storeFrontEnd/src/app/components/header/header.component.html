@@ -1,0 +1,37 @@
+<header class="header">
+  <div class="header-inner">
+    <a routerLink="/annonces" class="logo">MyStore</a>
+
+    <nav class="nav">
+      <a routerLink="/annonces" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">Annonces</a>
+      @if (authService.isLoggedIn) {
+        <a routerLink="/mes-annonces" routerLinkActive="active" class="nav-link">Mes annonces</a>
+        <a routerLink="/messages" routerLinkActive="active" class="nav-link">Messages</a>
+        <a routerLink="/annonces/nouvelle" routerLinkActive="active" class="nav-link nav-add">+ Publier</a>
+      }
+    </nav>
+
+    <div class="header-actions">
+      @if (authService.currentUser; as user) {
+        <div class="user-menu">
+          <button class="user-btn" (click)="toggleMenu()">
+            <span class="user-avatar">{{ user.prenom.charAt(0) }}{{ user.nom.charAt(0) }}</span>
+            <span class="user-name">{{ user.prenom }}</span>
+            <span class="chevron" [class.open]="menuOpen">&#9662;</span>
+          </button>
+          @if (menuOpen) {
+            <div class="dropdown">
+              <a routerLink="/profil" class="dropdown-item" (click)="menuOpen = false">Mon profil</a>
+              <a routerLink="/mes-annonces" class="dropdown-item" (click)="menuOpen = false">Mes annonces</a>
+              <a routerLink="/messages" class="dropdown-item" (click)="menuOpen = false">Messages</a>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item logout" (click)="logout()">Deconnexion</button>
+            </div>
+          }
+        </div>
+      } @else {
+        <a routerLink="/login" class="login-btn">Se connecter</a>
+      }
+    </div>
+  </div>
+</header>

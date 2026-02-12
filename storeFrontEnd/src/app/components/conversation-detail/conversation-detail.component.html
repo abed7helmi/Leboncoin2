@@ -1,0 +1,52 @@
+<div class="chat-container">
+  <div class="chat-header">
+    <a routerLink="/messages" class="back-btn">&larr;</a>
+    <div class="chat-title">
+      <span class="chat-annonce">{{ annonceTitre }}</span>
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="loading">
+      <div class="spinner"></div>
+    </div>
+  }
+
+  @if (!loading) {
+    <div class="messages-area" #messagesContainer>
+      @if (messages.length === 0) {
+        <div class="empty-chat">
+          <p>Aucun message dans cette conversation.</p>
+        </div>
+      }
+
+      @for (msg of messages; track msg.id; let i = $index) {
+        @if (shouldShowDate(i)) {
+          <div class="date-separator">
+            <span>{{ formatDate(msg.dateEnvoi) }}</span>
+          </div>
+        }
+        <div class="message-row" [class.mine]="isMe(msg)" [class.theirs]="!isMe(msg)">
+          <div class="bubble">
+            <div class="bubble-content">{{ msg.contenu }}</div>
+            <div class="bubble-time">{{ formatTime(msg.dateEnvoi) }}</div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="chat-input">
+      <input
+        type="text"
+        class="input-field"
+        placeholder="Ecrire un message..."
+        [(ngModel)]="newMessage"
+        (keydown.enter)="envoyer()"
+        [disabled]="sending"
+      >
+      <button class="send-btn" (click)="envoyer()" [disabled]="!newMessage.trim() || sending">
+        Envoyer
+      </button>
+    </div>
+  }
+</div>

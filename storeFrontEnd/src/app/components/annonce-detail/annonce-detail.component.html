@@ -1,0 +1,112 @@
+<div class="detail-container">
+  <a routerLink="/annonces" class="back-link">&larr; Retour aux annonces</a>
+
+  @if (loading) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Chargement...</p>
+    </div>
+  }
+
+  @if (error) {
+    <div class="error-message">
+      <span class="error-icon">!</span>
+      {{ error }}
+    </div>
+  }
+
+  @if (!loading && !error && annonce) {
+    <div class="detail-card">
+      @if (annonce.images && annonce.images.length > 0) {
+        <div class="detail-image">
+          <img [src]="annonce.images[0].url" [alt]="annonce.titre">
+        </div>
+      }
+
+      <div class="detail-header">
+        <div class="header-top">
+          <span class="badge" [class.active]="annonce.etat === 'ACTIVE'"
+                [class.vendu]="annonce.etat === 'VENDU'"
+                [class.desactive]="annonce.etat === 'DESACTIVE'">
+            {{ annonce.etat }}
+          </span>
+          <span class="category">{{ annonce.categorie.nom }}</span>
+        </div>
+        <h1 class="title">{{ annonce.titre }}</h1>
+        <div class="price">{{ formatPrice(annonce.prix) }}</div>
+      </div>
+
+      <div class="detail-body">
+        <div class="section">
+          <h2 class="section-title">Description</h2>
+          <p class="description">{{ annonce.description }}</p>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Ville</span>
+            <span class="info-value">{{ annonce.ville }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Publiee le</span>
+            <span class="info-value">{{ formatDate(annonce.dateCreation) }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Categorie</span>
+            <span class="info-value">{{ annonce.categorie.nom }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Etat</span>
+            <span class="info-value">{{ annonce.etat }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-seller">
+        <h2 class="section-title">Vendeur</h2>
+        <div class="seller-card">
+          <div class="avatar">{{ annonce.vendeur.prenom.charAt(0) }}{{ annonce.vendeur.nom.charAt(0) }}</div>
+          <div class="seller-info">
+            <span class="seller-name">{{ annonce.vendeur.prenom }} {{ annonce.vendeur.nom }}</span>
+            <span class="seller-city">{{ annonce.vendeur.ville }}</span>
+          </div>
+        </div>
+      </div>
+
+      @if (canContact) {
+        <div class="contact-section">
+          <h2 class="section-title">Contacter le vendeur</h2>
+
+          @if (messageSuccess) {
+            <div class="contact-success">
+              Message envoye avec succes !
+              <a [routerLink]="['/messages', annonce.id]" class="contact-link">Voir la conversation</a>
+            </div>
+          }
+
+          @if (messageError) {
+            <div class="contact-error">{{ messageError }}</div>
+          }
+
+          <textarea
+            class="contact-textarea"
+            placeholder="Ecrivez votre message..."
+            [(ngModel)]="messageContenu"
+            rows="3"
+          ></textarea>
+          <button
+            class="contact-btn"
+            (click)="envoyerMessage()"
+            [disabled]="!messageContenu.trim() || messageSending"
+          >
+            @if (messageSending) {
+              Envoi...
+            } @else {
+              Envoyer le message
+            }
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

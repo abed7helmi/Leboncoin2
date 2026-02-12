@@ -1,0 +1,63 @@
+<div class="form-container">
+  <div class="form-card">
+    <a routerLink="/mes-annonces" class="back-link">&larr; Mes annonces</a>
+    <h1 class="form-title">Nouvelle annonce</h1>
+    <p class="form-subtitle">Remplissez les informations de votre annonce</p>
+
+    @if (error) {
+      <div class="error-message">{{ error }}</div>
+    }
+
+    <form (ngSubmit)="onSubmit()" class="form">
+      <div class="field">
+        <label for="titre" class="label">Titre</label>
+        <input id="titre" type="text" class="input" placeholder="Ex: iPhone 14 Pro" [(ngModel)]="form.titre" name="titre" required>
+      </div>
+
+      <div class="field">
+        <label for="description" class="label">Description</label>
+        <textarea id="description" class="input textarea" placeholder="Decrivez votre article..." [(ngModel)]="form.description" name="description" rows="4" required></textarea>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="prix" class="label">Prix (EUR)</label>
+          <input id="prix" type="number" class="input" placeholder="0.00" [(ngModel)]="form.prix" name="prix" min="0" step="0.01" required>
+        </div>
+        <div class="field">
+          <label for="ville" class="label">Ville</label>
+          <input id="ville" type="text" class="input" placeholder="Ex: Paris" [(ngModel)]="form.ville" name="ville" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="categorie" class="label">Categorie</label>
+        <select id="categorie" class="input" [(ngModel)]="form.categorieId" name="categorieId" required>
+          <option [value]="0" disabled>Choisir une categorie</option>
+          @for (cat of categories; track cat.id) {
+            <option [value]="cat.id">{{ cat.nom }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="imageUrl" class="label">URL de l'image <span class="optional">(optionnel)</span></label>
+        <input id="imageUrl" type="url" class="input" placeholder="https://..." [(ngModel)]="form.imageUrl" name="imageUrl">
+      </div>
+
+      @if (form.imageUrl) {
+        <div class="image-preview">
+          <img [src]="form.imageUrl" alt="Apercu">
+        </div>
+      }
+
+      <button type="submit" class="submit-btn" [disabled]="loading || !isValid">
+        @if (loading) {
+          Publication...
+        } @else {
+          Publier l'annonce
+        }
+      </button>
+    </form>
+  </div>
+</div>

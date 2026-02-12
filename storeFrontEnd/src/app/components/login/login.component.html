@@ -1,0 +1,52 @@
+<div class="login-container">
+  <div class="login-card">
+    <h1 class="login-title">Connexion</h1>
+    <p class="login-subtitle">Connectez-vous a votre compte</p>
+
+    @if (error) {
+      <div class="error-message">{{ error }}</div>
+    }
+
+    <form (ngSubmit)="onSubmit()" class="login-form">
+      <div class="field">
+        <label for="email" class="label">Email</label>
+        <input
+          id="email"
+          type="email"
+          class="input"
+          placeholder="votre@email.com"
+          [(ngModel)]="email"
+          name="email"
+          required
+        >
+      </div>
+
+      <div class="field">
+        <label for="motDePasse" class="label">Mot de passe</label>
+        <input
+          id="motDePasse"
+          type="password"
+          class="input"
+          placeholder="Votre mot de passe"
+          [(ngModel)]="motDePasse"
+          name="motDePasse"
+          required
+        >
+      </div>
+
+      <button type="submit" class="submit-btn" [disabled]="loading || !email || !motDePasse">
+        @if (loading) {
+          Connexion...
+        } @else {
+          Se connecter
+        }
+      </button>
+    </form>
+
+    <div class="demo-hint">
+      <p class="hint-title">Comptes de demo :</p>
+      <p class="hint-account">alice.dupont&#64;email.com / motdepasse123</p>
+      <p class="hint-account">bob.martin&#64;email.com / motdepasse456</p>
+    </div>
+  </div>
+</div>

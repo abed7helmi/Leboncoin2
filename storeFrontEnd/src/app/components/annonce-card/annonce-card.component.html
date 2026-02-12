@@ -1,0 +1,30 @@
+<a class="card" [routerLink]="['/annonces', annonce.id]">
+  <div class="card-image">
+    @if (imageUrl) {
+      <img [src]="imageUrl" [alt]="annonce.titre">
+    } @else {
+      <div class="no-image">Pas d'image</div>
+    }
+    <div class="card-badge" [class.active]="annonce.etat === 'ACTIVE'"
+         [class.vendu]="annonce.etat === 'VENDU'"
+         [class.desactive]="annonce.etat === 'DESACTIVE'">
+      {{ annonce.etat }}
+    </div>
+  </div>
+  <div class="card-body">
+    <span class="card-category">{{ annonce.categorie.nom }}</span>
+    <h2 class="card-title">{{ annonce.titre }}</h2>
+    <p class="card-description">{{ annonce.description }}</p>
+    <div class="card-price">{{ formatPrice(annonce.prix) }}</div>
+  </div>
+  <div class="card-footer">
+    <div class="card-seller">
+      <div class="avatar">{{ annonce.vendeur.prenom.charAt(0) }}{{ annonce.vendeur.nom.charAt(0) }}</div>
+      <div class="seller-info">
+        <span class="seller-name">{{ annonce.vendeur.prenom }} {{ annonce.vendeur.nom }}</span>
+        <span class="seller-city">{{ annonce.ville }}</span>
+      </div>
+    </div>
+    <span class="card-date">{{ formatDate(annonce.dateCreation) }}</span>
+  </div>
+</a>

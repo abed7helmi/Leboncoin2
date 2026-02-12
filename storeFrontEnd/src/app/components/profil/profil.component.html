@@ -1,0 +1,49 @@
+<div class="profil-container">
+  @if (loading) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Chargement du profil...</p>
+    </div>
+  }
+
+  @if (error) {
+    <div class="error-message">
+      <span class="error-icon">!</span>
+      {{ error }}
+    </div>
+  }
+
+  @if (!loading && !error && utilisateur) {
+    <div class="profil-card">
+      <div class="profil-header">
+        <div class="avatar">{{ utilisateur.prenom.charAt(0) }}{{ utilisateur.nom.charAt(0) }}</div>
+        <div class="profil-identity">
+          <h1 class="profil-name">{{ utilisateur.prenom }} {{ utilisateur.nom }}</h1>
+          <span class="profil-role" [class.admin]="utilisateur.role === 'ADMIN'">{{ utilisateur.role }}</span>
+        </div>
+      </div>
+
+      <div class="profil-body">
+        <h2 class="section-title">Informations personnelles</h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Email</span>
+            <span class="info-value">{{ utilisateur.email }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Telephone</span>
+            <span class="info-value">{{ utilisateur.telephone || 'Non renseigne' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Ville</span>
+            <span class="info-value">{{ utilisateur.ville || 'Non renseignee' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Membre depuis</span>
+            <span class="info-value">{{ formatDate(utilisateur.dateCreation) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>
